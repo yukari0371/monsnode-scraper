@@ -8,11 +8,21 @@ import {
 } from "../types/monsnode";
 
 /**
- * Search word.
- * 
- * @param {string} word - Word to search.
- * @returns {object} - Results. 
- */
+* Searches for videos related to the specified keyword.
+* @param {string} word - The keyword to search for.
+* @returns {Promise<object>} The result containing an array of videos.
+*
+* Response format:
+* {
+*   success: true,
+*   data: [
+*     { video: { tweetUrl, videoImage, videoUrl } },
+*     { video: { tweetUrl, videoImage, videoUrl } },
+*     ...
+*   ]
+* }
+* If `data` is undefined, there were no matching results.
+*/
 export const search = async (word: string): Promise<SearchResult> => {
     const data: resData[] = [];
 
