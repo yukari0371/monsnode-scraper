@@ -7,10 +7,17 @@ import {
 } from "../types/monsnode";
 
 /**
- * Get random video.
- * 
- * @returns {object} - Results.
- */
+* Fetches a random video.
+* @returns {Promise<object>} The result containing video details.
+*
+* Response format:
+* {
+*   success: true,
+*   tweetUrl: 'https://x.com/shachikuchan69/status/1871487189118533766',
+*   videoImage: 'https://pbs.twimg.com/amplify_video_thumb/1871487131337842688/img/8PvstdYSNM2VsnpW.jpg',
+*   videoUrl: 'https://video.twimg.com/amplify_video/1871487131337842688/vid/avc1/720x1280/hs7f2cTq1C2DAJTo.mp4?tag=16'
+* }
+*/
 export const getRandom = async (): Promise<getRandomResult> => {
     let tweetUrl: string = "";
     let videoImage: string = "";
