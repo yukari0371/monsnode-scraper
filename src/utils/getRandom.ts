@@ -33,10 +33,10 @@ export const getRandom = async (): Promise<getRandomResult> => {
         const urls: string[] = [];
         const imageUrls: string[] = [];                
         $(".listn").each((_, element) => {
-            const url = $(element).find("a").attr("href");
-            urls.push(String(url));
-            const imageUrl = $(element).find("img").attr("src");
-            imageUrls.push(String(imageUrl));
+            const url = $(element).find("a").attr("href") ?? "";
+            urls.push(url as string);
+            const imageUrl = $(element).find("img").attr("src") ?? "";
+            imageUrls.push(imageUrl as string);
         });
         const randomIndex = Math.floor(Math.random() * urls.length);
         videoImage = imageUrls[randomIndex];
