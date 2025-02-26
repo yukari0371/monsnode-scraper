@@ -21,11 +21,9 @@ export const getRandom = async (): Promise<getRandomResult> => {
         const response = await axios.get(`https://monsnode.com?page=${Math.floor(Math.random() * 50) + 1}`);
 
         if (response.status !== 200) {
-            if (response.statusText) {
-                return {
-                    status: "error",
-                    message: response.statusText
-                }
+            return {
+                status: "error",
+                message: response.statusText || undefined
             }
         }
 
@@ -45,17 +43,17 @@ export const getRandom = async (): Promise<getRandomResult> => {
         const response_2 = await axios.get(url);
 
         if (response_2.status !== 200) {
-            if (response.statusText && typeof response.statusText == "string") {
+            if (response_2.statusText && typeof response_2.statusText == "string") {
                 return {
                     status: "error",
-                    message: response.statusText || undefined
+                    message: response_2.statusText || undefined
                 }
             }
         }
 
         const $_2 = cheerio.load(response_2.data);
         $("a").each((_, element) => {
-            const url = $_2(element).attr("href") ?? "";
+            const url = $_2(element).attr("href");
             if (url?.startsWith("https://x.com/")) {
                 tweetUrl = url;
             } else if (url?.startsWith("https://video.twimg.com/")) {
