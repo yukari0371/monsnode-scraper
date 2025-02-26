@@ -55,7 +55,7 @@ export const getRandom = async (): Promise<getRandomResult> => {
 
         const $_2 = cheerio.load(response_2.data);
         $("a").each((_, element) => {
-            const url = $_2(element).attr("href");
+            const url = $_2(element).attr("href") ?? "";
             if (url?.startsWith("https://x.com/")) {
                 tweetUrl = url;
             } else if (url?.startsWith("https://video.twimg.com/")) {
