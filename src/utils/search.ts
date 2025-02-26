@@ -30,8 +30,8 @@ export const search = async (word: string): Promise<SearchResult> => {
 
         const $ = cheerio.load(response.data);
         $(".listn").each((_, element) => {
-            const url = $(element).find("a").attr("href");
-            const imageUrl = $(element).find("img").attr("src");
+            const url = $(element).find("a").attr("href") ?? "";
+            const imageUrl = $(element).find("img").attr("src") ?? "";
             data.push({
                 video: {
                     url: url,
