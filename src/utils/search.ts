@@ -19,9 +19,12 @@ export const search = async (word: string): Promise<SearchResult> => {
     try {
         const response = await axios.get(`https://monsnode.com/search.php?search=${word}`);
 
-        if (response.status != 200) {
+        if (response.status !== 200) {
             if (response.statusText && typeof response.statusText == "string") {
-
+                return {
+                    status: "error",
+                    message: response.statusText || undefined
+                }
             }
         }
 
@@ -41,7 +44,7 @@ export const search = async (word: string): Promise<SearchResult> => {
         if (e instanceof Error && typeof e.message == "string") {
             return {
                 status: "error",
-                message: e.message
+                message: e.message || undefined
             }
         }
     }
