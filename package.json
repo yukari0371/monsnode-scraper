@@ -1,0 +1,12 @@
+{
+  "name": "monsnode",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/axios": "^0.14.4",
+    "@types/cheerio": "^0.22.35",
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0"
+  }
+}
