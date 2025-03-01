@@ -1,9 +1,9 @@
 export type getRandomResult =
 | {
     status: "success",
-    tweetUrl: string | undefined;
-    videoImage: string | undefined;
-    videoUrl: string | undefined;
+    tweetUrl: string;
+    videoImage: string;
+    videoUrl: string;
 } | {
     status: "error";
     message: string;
@@ -11,9 +11,10 @@ export type getRandomResult =
 
 export type resData = {
     video: {
-        url: string | undefined;
+        url: string;
         imageUrl: string | undefined;
-    }
+    }        
+
 }
 
 export type SearchResult =
@@ -22,5 +23,5 @@ export type SearchResult =
     data: resData[] | undefined;
 } | {
     status: "error";
-    message: string
+    message: string | undefined
 }
