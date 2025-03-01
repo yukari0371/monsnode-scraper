@@ -28,23 +28,23 @@ export const getRandom = async (): Promise<getRandomResult> => {
         const response = await axios.get(`https://monsnode.com?page=${Math.floor(Math.random() * 50) + 1}`);
 
         if (response.status !== 200) {
-            if (response.statusText && typeof response.statusText == "string") {
-                return {
-                    status: "error",
-                    message: response.statusText || undefined
-                }
+            return {
+                status: "error",
+                message: response.statusText
             }
         }
 
         const $ = cheerio.load(response.data);
         const urls: string[] = [];
-        const imageUrls: string[] = [];                
+        const imageUrls: string[] = [];
+
         $(".listn").each((_, element) => {
             const url = $(element).find("a").attr("href") ?? "";
             urls.push(url as string);
             const imageUrl = $(element).find("img").attr("src") ?? "";
             imageUrls.push(imageUrl as string);
         });
+
         const randomIndex = Math.floor(Math.random() * urls.length);
         videoImage = imageUrls[randomIndex];
         url = urls[randomIndex];
@@ -52,11 +52,9 @@ export const getRandom = async (): Promise<getRandomResult> => {
         const response_2 = await axios.get(url);
 
         if (response_2.status !== 200) {
-            if (response_2.statusText && typeof response_2.statusText == "string") {
-                return {
-                    status: "error",
-                    message: response_2.statusText || undefined
-                }
+            return {
+                status: "error",
+                message: response_2.statusText ?? ""
             }
         }
 
@@ -71,17 +69,17 @@ export const getRandom = async (): Promise<getRandomResult> => {
         });
 
     } catch (e) {
-        if (e instanceof Error && typeof e.message == "string") {
+        if (e instanceof Error) {
             return {
                 status: "error",
-                message: e.message || undefined
+                message: e.message
             }
         }
     }
     return {
         status: "success",
-        tweetUrl: tweetUrl || undefined,
-        videoImage: videoImage || undefined,
-        videoUrl: videoUrl || undefined
+        tweetUrl: tweetUrl,
+        videoImage: videoImage,
+        videoUrl: videoUrl
     }
 }
