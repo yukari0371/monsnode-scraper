@@ -8,21 +8,11 @@ import {
 } from "../types/monsnode";
 
 /**
-* Searches for videos related to the specified keyword.
-* @param {string} word - The keyword to search for.
-* @returns {Promise<object>} The result containing an array of videos.
-*
-* Response format:
-* {
-*   success: true,
-*   data: [
-*     { video: { tweetUrl, videoImage, videoUrl } },
-*     { video: { tweetUrl, videoImage, videoUrl } },
-*     ...
-*   ]
-* }
-* If `data` is undefined, there were no matching results.
-*/
+ * Search word.
+ * 
+ * @param {string} word - Word to search.
+ * @returns {Promise<object>} - Results. 
+ */
 export const search = async (word: string): Promise<SearchResult> => {
     const data: resData[] = [];
 
@@ -30,11 +20,9 @@ export const search = async (word: string): Promise<SearchResult> => {
         const response = await axios.get(`https://monsnode.com/search.php?search=${word}`);
 
         if (response.status !== 200) {
-            if (response.statusText && typeof response.statusText == "string") {
-                return {
-                    status: "error",
-                    message: response.statusText || undefined
-                }
+            return {
+                status: "error",
+                message: response.statusText
             }
         }
 
@@ -54,12 +42,12 @@ export const search = async (word: string): Promise<SearchResult> => {
         if (e instanceof Error && typeof e.message == "string") {
             return {
                 status: "error",
-                message: e.message || undefined
+                message: e.message
             }
         }
     }
     return {
         status: "success",
-        data: data || undefined
+        data: data
     }
 }
