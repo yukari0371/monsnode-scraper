@@ -19,67 +19,69 @@ import {
 * }
 */
 export const getRandom = async (): Promise<getRandomResult> => {
-    let tweetUrl: string = "";
-    let videoImage: string = "";
-    let videoUrl: string = "";
-
-    try {
-        let url: string = "";
-        const response = await axios.get(`https://monsnode.com?page=${Math.floor(Math.random() * 50) + 1}`);
-
-        if (response.status !== 200) {
-            return {
-                status: "error",
-                message: response.statusText
+    return new Promise(async (resolve, reject) => {
+        let tweetUrl: string = "";
+        let videoImage: string = "";
+        let videoUrl: string = "";
+    
+        try {
+            let url: string = "";
+            const response = await axios.get(`https://monsnode.com?page=${Math.floor(Math.random() * 50) + 1}`);
+    
+            if (response.status !== 200) {
+                reject({
+                    status: "error",
+                    message: response.statusText
+                });
+            }
+    
+            const $ = cheerio.load(response.data);
+            const urls: string[] = [];
+            const imageUrls: string[] = [];
+    
+            $(".listn").each((_, element) => {
+                const url = $(element).find("a").attr("href") ?? "";
+                urls.push(url as string);
+                const imageUrl = $(element).find("img").attr("src") ?? "";
+                imageUrls.push(imageUrl as string);
+            });
+    
+            const randomIndex = Math.floor(Math.random() * urls.length);
+            videoImage = imageUrls[randomIndex];
+            url = urls[randomIndex];
+    
+            const response_2 = await axios.get(url);
+    
+            if (response_2.status !== 200) {
+                reject({
+                    status: "error",
+                    message: response_2.statusText ?? ""
+                });
+            }
+    
+            const $_2 = cheerio.load(response_2.data);
+            $("a").each((_, element) => {
+                const url = $_2(element).attr("href");
+                if (url?.startsWith("https://x.com/")) {
+                    tweetUrl = url;
+                } else if (url?.startsWith("https://video.twimg.com/")) {
+                    videoUrl = url;
+                }
+            });
+    
+        } catch (e) {
+            if (e instanceof Error) {
+                reject({
+                    status: "error",
+                    message: e.message
+                });
             }
         }
-
-        const $ = cheerio.load(response.data);
-        const urls: string[] = [];
-        const imageUrls: string[] = [];
-
-        $(".listn").each((_, element) => {
-            const url = $(element).find("a").attr("href") ?? "";
-            urls.push(url as string);
-            const imageUrl = $(element).find("img").attr("src") ?? "";
-            imageUrls.push(imageUrl as string);
+        resolve({
+            status: "success",
+            tweetUrl: tweetUrl,
+            videoImage: videoImage,
+            videoUrl: videoUrl
         });
-
-        const randomIndex = Math.floor(Math.random() * urls.length);
-        videoImage = imageUrls[randomIndex];
-        url = urls[randomIndex];
-
-        const response_2 = await axios.get(url);
-
-        if (response_2.status !== 200) {
-            return {
-                status: "error",
-                message: response_2.statusText ?? ""
-            }
-        }
-
-        const $_2 = cheerio.load(response_2.data);
-        $("a").each((_, element) => {
-            const url = $_2(element).attr("href");
-            if (url?.startsWith("https://x.com/")) {
-                tweetUrl = url;
-            } else if (url?.startsWith("https://video.twimg.com/")) {
-                videoUrl = url;
-            }
-        });
-
-    } catch (e) {
-        if (e instanceof Error) {
-            return {
-                status: "error",
-                message: e.message
-            }
-        }
-    }
-    return {
-        status: "success",
-        tweetUrl: tweetUrl,
-        videoImage: videoImage,
-        videoUrl: videoUrl
-    }
+    });
 }
