@@ -14,40 +14,42 @@ import {
  * @returns {Promise<object>} - Results. 
  */
 export const search = async (word: string): Promise<SearchResult> => {
-    const data: resData[] = [];
+    return new Promise(async (resolve, reject) => {
+        const data: resData[] = [];
 
-    try {
-        const response = await axios.get(`https://monsnode.com/search.php?search=${word}`);
-
-        if (response.status !== 200) {
-            return {
-                status: "error",
-                message: response.statusText
+        try {
+            const response = await axios.get(`https://monsnode.com/search.php?search=${word}`);
+    
+            if (response.status !== 200) {
+                reject({
+                    status: "error",
+                    message: response.statusText
+                });
             }
-        }
-
-        const $ = cheerio.load(response.data);
-        $(".listn").each((_, element) => {
-            const url = $(element).find("a").attr("href") ?? "";
-            const imageUrl = $(element).find("img").attr("src") ?? "";
-            data.push({
-                video: {
-                    url: url,
-                    imageUrl: imageUrl 
-                }
+    
+            const $ = cheerio.load(response.data);
+            $(".listn").each((_, element) => {
+                const url = $(element).find("a").attr("href") ?? "";
+                const imageUrl = $(element).find("img").attr("src") ?? "";
+                data.push({
+                    video: {
+                        url: url,
+                        imageUrl: imageUrl 
+                    }
+                });
             });
-        });
-
-    } catch (e) {
-        if (e instanceof Error && typeof e.message == "string") {
-            return {
-                status: "error",
-                message: e.message
+    
+        } catch (e) {
+            if (e instanceof Error && typeof e.message == "string") {
+                reject({
+                    status: "error",
+                    message: e.message
+                });
             }
         }
-    }
-    return {
-        status: "success",
-        data: data
-    }
+        resolve({
+            status: "success",
+            data: data
+        });
+    });
 }
