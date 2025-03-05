@@ -21,7 +21,7 @@ export const search = async (word: string): Promise<SearchResult> => {
             const response = await axios.get(`https://monsnode.com/search.php?search=${word}`);
     
             if (response.status !== 200) {
-                reject({
+                return reject({
                     status: "error",
                     message: response.statusText
                 });
@@ -41,7 +41,7 @@ export const search = async (word: string): Promise<SearchResult> => {
     
         } catch (e) {
             if (e instanceof Error && typeof e.message == "string") {
-                reject({
+                return reject({
                     status: "error",
                     message: e.message
                 });
