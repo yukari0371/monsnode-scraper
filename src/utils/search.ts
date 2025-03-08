@@ -14,14 +14,14 @@ import {
  * @returns {Promise<object>} - Results. 
  */
 export const search = async (word: string): Promise<SearchResult> => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const data: resData[] = [];
 
         try {
             const response = await axios.get(`https://monsnode.com/search.php?search=${word}`);
     
             if (response.status !== 200) {
-                return reject({
+                return resolve({
                     status: "error",
                     message: response.statusText
                 });
@@ -41,7 +41,7 @@ export const search = async (word: string): Promise<SearchResult> => {
     
         } catch (e) {
             if (e instanceof Error && typeof e.message == "string") {
-                return reject({
+                return resolve({
                     status: "error",
                     message: e.message
                 });
