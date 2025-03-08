@@ -19,7 +19,7 @@ import {
 * }
 */
 export const getRandom = async (): Promise<getRandomResult> => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         let tweetUrl: string = "";
         let videoImage: string = "";
         let videoUrl: string = "";
@@ -29,7 +29,7 @@ export const getRandom = async (): Promise<getRandomResult> => {
             const response = await axios.get(`https://monsnode.com?page=${Math.floor(Math.random() * 50) + 1}`);
     
             if (response.status !== 200) {
-                return reject({
+                return resolve({
                     status: "error",
                     message: response.statusText
                 });
@@ -53,7 +53,7 @@ export const getRandom = async (): Promise<getRandomResult> => {
             const response_2 = await axios.get(url);
     
             if (response_2.status !== 200) {
-                return reject({
+                return resolve({
                     status: "error",
                     message: response_2.statusText ?? ""
                 });
@@ -71,7 +71,7 @@ export const getRandom = async (): Promise<getRandomResult> => {
     
         } catch (e) {
             if (e instanceof Error) {
-                return reject({
+                return resolve({
                     status: "error",
                     message: e.message
                 });
