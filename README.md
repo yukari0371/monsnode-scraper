@@ -1,7 +1,6 @@
 # monsnode-scraper
 Scraper for monsnode
 ### Usage
-### Example
 ```ts
 import monsnode from "./dist/index.js";
 
